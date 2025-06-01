@@ -62,11 +62,22 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+  // 1. Block guests from protected pages
   if (to.meta.requiresAuth && !isLoggedIn) {
     next('/login');
-  } else {
-    next();
+    return;
   }
+
+  // 2. Block logged-in users from auth pages.
+  const guestOnlyPages = ['/login', '/register'];
+  if (guestOnlyPages.includes(to.path) && isLoggedIn) {
+    next('/');
+    return;
+  }
+
+  // 3. Otherwise, allow navigation
+  next();
 });
 
 export default router;
