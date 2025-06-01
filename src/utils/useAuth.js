@@ -14,6 +14,7 @@ export const useAuth = () => {
 
   const logout = () => {
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userName');
     isLoggedIn.value = false;
   };
 

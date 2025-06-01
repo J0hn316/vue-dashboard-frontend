@@ -47,6 +47,8 @@ const { login } = useAuth();
 
 const handleLogin = () => {
   if (email.value && password.value) {
+    localStorage.setItem('isLoggedIn', true);
+    localStorage.setItem('userName', email.value);
     login();
     router.push('/');
   }

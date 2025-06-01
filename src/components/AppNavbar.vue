@@ -108,7 +108,6 @@ const { isDark, toggleDarkMode } = useDarkMode();
 
 const isLoggedIn = computed(() => auth.isLoggedIn.value);
 
-console.log('isLoggedIn =', isLoggedIn.value);
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'Todos', href: '/todos' },
