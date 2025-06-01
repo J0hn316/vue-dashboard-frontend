@@ -24,7 +24,6 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    meta: { requiresAuth: true },
   },
   {
     path: '/dashboard',
@@ -36,7 +35,6 @@ const routes = [
     path: '/todos',
     name: 'Todos',
     component: Todos,
-    meta: { requiresAuth: true },
   },
   {
     path: '/users',

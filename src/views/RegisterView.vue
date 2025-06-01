@@ -41,6 +41,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuth } from '../utils/useAuth';
 import BaseButton from '../components/ui/BaseButton.vue';
 
 const router = useRouter();
@@ -48,12 +49,13 @@ const router = useRouter();
 const email = ref('');
 const password = ref('');
 const registered = ref(false);
+const { login } = useAuth();
 
 const register = () => {
   if (email.value && password.value) {
     // Fake "register" - just storing in localStorage
     localStorage.setItem('user', JSON.stringify({ email: email.value }));
-    localStorage.setItem('isLoggedIn', 'true');
+    login();
     registered.value = true;
 
     // Optionally redirect after short delay

@@ -3,7 +3,7 @@
     class="max-w-md mx-auto bg-white dark:bg-gray-800 p-6 rounded-xl shadow mt-10"
   >
     <h2 class="text-2xl font-bold mb-4">Login</h2>
-    <form @submit.prevent="login" class="space-y-4">
+    <form @submit.prevent="handleLogin" class="space-y-4">
       <div>
         <label for="email" class="block font-medium mb-1">Email</label>
         <input
@@ -37,16 +37,18 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuth } from '../utils/useAuth.js';
 import BaseButton from '../components/ui/BaseButton.vue';
 
 const email = ref('');
 const password = ref('');
 const router = useRouter();
+const { login } = useAuth();
 
-const login = () => {
+const handleLogin = () => {
   if (email.value && password.value) {
-    localStorage.setItem('isLoggedIn', 'true');
-    router.push('/dashboard');
+    login();
+    router.push('/');
   }
 };
 </script>

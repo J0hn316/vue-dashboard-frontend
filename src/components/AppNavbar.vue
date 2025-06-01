@@ -34,16 +34,11 @@
 
       <!-- Desktop nav links -->
       <ul class="hidden md:flex space-x-6 text-gray-700 dark:text-gray-200">
-        <RouterLink
-          v-for="link in navLinks"
-          :key="link.label"
-          :to="link.href"
-          class="hover:scale-105 transition-all"
-          active-class="text-blue-600 dark:text-blue-400 font-semibold"
-        >
-          {{ link.label }}
-        </RouterLink>
-        <BaseButton size="sm" @click="logout">Logout</BaseButton>
+        <NavLinkList
+          :links="navLinks"
+          :is-logged-in="isLoggedIn"
+          :showLogout="true"
+        />
       </ul>
 
       <!-- Mobile toggle button -->
@@ -85,41 +80,43 @@
     <!-- Mobile nav menu -->
     <div v-if="isOpen" class="md:hidden px-4 pb-4">
       <ul class="space-y-2 text-gray-700 dark:text-gray-200">
-        <RouterLink
-          v-for="link in navLinks"
-          :key="link.label"
-          :to="link.href"
-          class="block hover:scale-105 transition-all"
-          active-class="text-blue-600 dark:text-blue-400 font-semibold"
-        >
-          {{ link.label }}
-        </RouterLink>
-        <BaseButton size="sm" @click="logout">Logout</BaseButton>
+        <NavLinkList
+          :links="navLinks"
+          :is-logged-in="isLoggedIn"
+          :showLogout="true"
+          :onNavigate="
+            () => {
+              isOpen = false;
+            }
+          "
+        />
       </ul>
     </div>
   </header>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { ref, computed } from 'vue';
+
+import { useAuth } from '../utils/useAuth.js';
 import { useDarkMode } from '../utils/useDarkMode.js';
-import BaseButton from '../components/ui/BaseButton.vue';
+import NavLinkList from './NavLinkList.vue';
 
 const isOpen = ref(false);
-const router = useRouter();
+const auth = useAuth();
 const { isDark, toggleDarkMode } = useDarkMode();
 
+const isLoggedIn = computed(() => auth.isLoggedIn.value);
+
+console.log('isLoggedIn =', isLoggedIn.value);
 const navLinks = [
   { label: 'Home', href: '/' },
-  { label: 'Users', href: '/users' },
   { label: 'Todos', href: '/todos' },
-  { label: 'Posts', href: '/posts' },
   { label: 'Contact', href: '/contact' },
+  { label: 'Users', href: '/users', auth: true },
+  { label: 'Posts', href: '/posts', auth: true },
+  { label: 'Dashboard', href: '/dashboard', auth: true },
+  { label: 'Login', href: '/login', guestOnly: true },
+  { label: 'Register', href: '/register', guestOnly: true },
 ];
-
-const logout = () => {
-  localStorage.removeItem('isLoggedIn');
-  router.push('/login');
-};
 </script>

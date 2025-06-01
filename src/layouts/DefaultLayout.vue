@@ -2,7 +2,7 @@
   <div
     class="min-h-screen bg-gray-300 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
   >
-    <AppNavbar v-if="showNavbar" />
+    <AppNavbar />
     <main class="p-6 max-w-7xl mx-auto">
       <RouterView v-slot="{ Component }">
         <Transition name="fade" mode="out-in">
@@ -14,14 +14,8 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useRoute, RouterView } from 'vue-router';
+import { RouterView } from 'vue-router';
 import AppNavbar from '../components/AppNavbar.vue';
-
-const route = useRoute();
-const showNavbar = computed(
-  () => route.path !== '/login' && route.path !== '/register'
-);
 </script>
 
 <style>
