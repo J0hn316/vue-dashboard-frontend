@@ -4,73 +4,57 @@
   >
     <h1 class="text-2xl font-bold mb-4">Welcome back, {{ user }} 👋</h1>
 
-    <div class="grid sm:grid-col-2 lg:grid-col-3 gap-6">
-      <TransitionGroup
-        name="fade"
-        tag="div"
-        appear
-        class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+    <TransitionGroup
+      name="fade"
+      tag="div"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+    >
+      <!-- Card 1 -->
+      <div key="todos" class="p-4 bg-white dark:bg-gray-700 rounded-lg shadow">
+        <h2 class="text-lg font-semibold mb-2">Total Todos</h2>
+        <p class="text-2xl font-bold text-blue-500">12</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div key="users" class="p-4 bg-white dark:bg-gray-700 rounded-lg shadow">
+        <h2 class="text-lg font-semibold mb-2">Active Users</h2>
+        <p class="text-2xl font-bold text-green-500">8</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div
+        key="messages"
+        class="p-4 bg-white dark:bg-gray-700 rounded-lg shadow"
       >
-        <!-- User Info -->
-        <DashboardCard title="Your info" :key="'info'">
-          <p><strong>Username:</strong> {{ user }}</p>
-          <p><strong>Email:</strong> {{ userName }}</p>
-        </DashboardCard>
-        <!-- Quick Links -->
-        <DashboardCard title="Quick links" :key="'quick-links'">
-          <ul class="space-y-2">
-            <li>
-              <RouterLink
-                to="/todos"
-                class="text-blue-600 dark:text-blue-400 hover:underline"
-                >Manage Todos</RouterLink
-              >
-            </li>
-            <li>
-              <RouterLink
-                to="/posts"
-                class="text-blue-600 dark:text-blue-400 hover:underline"
-                >Browse Posts</RouterLink
-              >
-            </li>
-            <li>
-              <RouterLink
-                to="/users"
-                class="text-blue-600 dark:text-blue-400 hover:underline"
-                >User Directory</RouterLink
-              >
-            </li>
-          </ul>
-        </DashboardCard>
-        <!-- Recent Activity -->
-        <DashboardCard title="Recent activity" :key="'activity'">
-          <p>No recent activity to show.</p>
-        </DashboardCard>
-      </TransitionGroup>
-    </div>
+        <h2 class="text-lg font-semibold mb-2">Unread Messages</h2>
+        <div v-if="unreadMessages > 0">
+          <p class="text-2xl font-bold text-red-500">{{ unreadMessages }}</p>
+        </div>
+        <div v-else class="text-sm text-gray-500 italic">
+          No unread messages 🎉
+        </div>
+      </div>
+    </TransitionGroup>
   </section>
 </template>
 
 <script setup>
-import DashboardCard from '../components/ui/DashboardCard.vue';
 import { useUser } from '../utils/useUser.js';
 
 // Extract just the name before @
 const { userName } = useUser();
 const user = userName.value.split('@')[0];
+
+const unreadMessages = 0;
 </script>
 
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.4s ease;
+  transition: opacity 0.4s ease;
 }
-.fade-enter-from {
-  opacity: 0;
-  transform: translateY(12px);
-}
+.fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-  transform: translateY(-12px);
 }
 </style>
