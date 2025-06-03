@@ -2,7 +2,9 @@
   <section
     class="max-w-4xl mx-auto mt-10 bg-gray-200 dark:bg-gray-800 p-6 rounded-xl shadow"
   >
-    <h1 class="text-2xl font-bold mb-4">Welcome back, {{ userName }} 👋</h1>
+    <h1 class="text-2xl font-bold mb-4">
+      Welcome back, {{ capitalizeFirstLetter(user) }} 👋
+    </h1>
 
     <TransitionGroup
       name="fade"
@@ -41,7 +43,13 @@
 <script setup>
 import { useUser } from '../utils/useUser.js';
 const { userName } = useUser();
+const user = userName.value;
+
 const unreadMessages = 0;
+
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
 </script>
 
 <style scoped>
