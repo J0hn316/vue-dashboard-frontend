@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-2xl font-bold mb-4">Users</h2>
+    <h2 class="text-2xl font-bold mb-4">{{ title }}</h2>
 
     <LoadingSpinner v-if="isLoading" />
 
@@ -17,7 +17,7 @@
       </button>
     </div>
 
-    <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div v-else :class="['grid md:grid-cols-2', gridCols, 'gap-4']">
       <BaseCard v-for="user in users" :key="user.id">
         <h3 class="text-lg font-semibold">
           {{ user.name }}
@@ -34,30 +34,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { onMounted } from 'vue';
 import BaseCard from './BaseCard.vue';
 import LoadingSpinner from './ui/LoadingSpinner.vue';
+import { useUsers } from '../composables/useUsers.js';
 
-const users = ref([]);
-const error = ref(null);
-const isLoading = ref(true);
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const props = defineProps({
+  title: {
+    type: String,
+    default: 'Users',
+  },
+  gridCols: {
+    type: String,
+    default: 'lg:grid-cols-3',
+  },
+});
 
-const fetchUsers = async () => {
-  isLoading.value = true;
-  error.value = null;
-
-  try {
-    const res = await axios.get(`${API_BASE_URL}/users`);
-    users.value = res.data;
-  } catch (err) {
-    console.error('API failed:', err);
-    error.value = 'Failed to load user data';
-  } finally {
-    isLoading.value = false;
-  }
-};
+const { users, error, isLoading, fetchUsers } = useUsers();
 
 onMounted(fetchUsers);
 </script>

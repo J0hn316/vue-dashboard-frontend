@@ -53,7 +53,6 @@ const { login } = useAuth();
 
 const register = () => {
   if (email.value && password.value) {
-    // Fake "register" - just storing in localStorage
     localStorage.setItem('user', JSON.stringify({ email: email.value }));
     login();
     registered.value = true;

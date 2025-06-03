@@ -2,7 +2,7 @@
   <section
     class="max-w-4xl mx-auto mt-10 bg-gray-200 dark:bg-gray-800 p-6 rounded-xl shadow"
   >
-    <h1 class="text-2xl font-bold mb-4">Welcome back, {{ user }} 👋</h1>
+    <h1 class="text-2xl font-bold mb-4">Welcome back, {{ userName }} 👋</h1>
 
     <TransitionGroup
       name="fade"
@@ -40,11 +40,7 @@
 
 <script setup>
 import { useUser } from '../utils/useUser.js';
-
-// Extract just the name before @
 const { userName } = useUser();
-const user = userName.value.split('@')[0];
-
 const unreadMessages = 0;
 </script>
 
