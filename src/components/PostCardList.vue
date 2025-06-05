@@ -19,8 +19,14 @@
       </button>
     </div>
 
-    <!-- Filter Buttons -->
     <div v-else>
+      <input
+        v-model="searchQuery"
+        type="text"
+        placeholder="Search posts..."
+        class="mb-4 w-full md:w-1/2 px-4 py-2 border rounded dark:bg-gray-900 dark:border-gray-600"
+      />
+      <!-- Filter Buttons -->
       <div class="flex gap-2 mb-4 flex-wrap">
         <button
           class="bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded"
@@ -42,21 +48,27 @@
 
       <!-- Post Cards -->
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <BaseCard v-for="post in paginatedPosts" :key="post.id">
-          <h3 class="text-lg font-semibold mb-1">
-            {{ post.title }}
-          </h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300">
-            {{
-              post.body.length > 100
-                ? post.body.slice(0, 100) + '...'
-                : post.body
-            }}
-          </p>
-          <p class="text-xs text-gray-500 mt-2">
-            {{ post.id }} | User: {{ post.userId }}
-          </p>
-        </BaseCard>
+        <RouterLink
+          v-for="post in paginatedPosts"
+          :key="post.id"
+          :to="`/posts/${post.id}`"
+        >
+          <BaseCard>
+            <h3 class="text-lg font-semibold mb-1">
+              {{ post.title }}
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300">
+              {{
+                post.body.length > 100
+                  ? post.body.slice(0, 100) + '...'
+                  : post.body
+              }}
+            </p>
+            <p class="text-xs text-gray-500 mt-2">
+              {{ post.id }} | User: {{ post.userId }}
+            </p>
+          </BaseCard>
+        </RouterLink>
       </div>
 
       <!-- Pagination Control -->
@@ -91,6 +103,7 @@ import LoadingSpinner from './ui/LoadingSpinner.vue';
 
 const posts = ref([]);
 const error = ref(null);
+const searchQuery = ref('');
 const isLoading = ref(true);
 const filterUserId = ref(null);
 
@@ -115,9 +128,20 @@ onMounted(fetchPosts);
 
 // Filtering
 const filteredPosts = computed(() => {
-  return filterUserId.value
-    ? posts.value.filter((post) => post.userId === filterUserId.value)
-    : posts.value;
+  const search = searchQuery.value.toLowerCase();
+
+  return posts.value.filter((post) => {
+    // Checks if post matches the selected user ID (or "All").
+    const matchesUser =
+      filterUserId.value === null || post.userId === filterUserId.value;
+
+    // Checks if title or body includes the typed search term.
+    const matchesSearch =
+      post.title.toLowerCase().includes(search) ||
+      post.body.toLowerCase().includes(search);
+
+    return matchesUser && matchesSearch;
+  });
 });
 
 const uniqueUserIds = computed(() => {

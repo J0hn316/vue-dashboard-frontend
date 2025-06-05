@@ -8,6 +8,7 @@ import Users from '../views/UsersView.vue';
 import Contact from '../views/ContactView.vue';
 import Register from '../views/RegisterView.vue';
 import Dashboard from '../views/DashboardView.vue';
+import PostDetail from '../views/PostDetailView.vue';
 
 const routes = [
   {
@@ -46,6 +47,12 @@ const routes = [
     path: '/posts',
     name: 'Post',
     component: Post,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/posts/:id',
+    name: 'PostDetail',
+    component: PostDetail,
     meta: { requiresAuth: true },
   },
   {
