@@ -110,11 +110,11 @@ const isLoggedIn = computed(() => auth.isLoggedIn.value);
 
 const navLinks = [
   { label: 'Home', href: '/' },
-  { label: 'Todos', href: '/todos' },
-  { label: 'Contact', href: '/contact' },
   { label: 'Users', href: '/users', auth: true },
   { label: 'Posts', href: '/posts', auth: true },
+  { label: 'Todos', href: '/todos' },
   { label: 'Dashboard', href: '/dashboard', auth: true },
+  { label: 'Contact', href: '/contact' },
   { label: 'Login', href: '/login', guestOnly: true },
   { label: 'Register', href: '/register', guestOnly: true },
 ];
