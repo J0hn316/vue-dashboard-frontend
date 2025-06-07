@@ -107,14 +107,12 @@ const searchQuery = ref('');
 const isLoading = ref(true);
 const filterUserId = ref(null);
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
 const fetchPosts = async () => {
   isLoading.value = true;
   error.value = null;
 
   try {
-    const res = await axios.get(`${API_BASE_URL}/posts`);
+    const res = await axios.get('/posts');
     posts.value = res.data;
   } catch (err) {
     console.error('API failed:', err);

@@ -5,14 +5,13 @@ export const useUsers = () => {
   const users = ref([]);
   const isLoading = ref(false);
   const error = ref(null);
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const fetchUsers = async () => {
     isLoading.value = true;
     error.value = null;
 
     try {
-      const res = await axios.get(`${API_BASE_URL}/users`);
+      const res = await axios.get('/users');
       users.value = res.data;
     } catch (err) {
       console.error('API failed:', err);

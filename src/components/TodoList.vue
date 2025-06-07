@@ -100,7 +100,6 @@ const isLoading = ref(true);
 const currentPage = ref(1);
 const todosPerPage = 6;
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 // Fetch todos from API
@@ -109,7 +108,7 @@ const fetchTodos = async () => {
   error.value = null;
 
   try {
-    const res = await axios.get(`${API_BASE_URL}/todos`, {
+    const res = await axios.get('/todos', {
       headers: {
         Authorization: `Bearer ${API_KEY}`,
       },

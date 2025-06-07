@@ -34,14 +34,13 @@ const postId = route.params.id;
 const post = ref({});
 const error = ref(null);
 const isLoading = ref(true);
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const fetchPosts = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/posts/${postId}`);
+    const res = await axios.get(`/posts/${postId}`);
     post.value = res.data;
   } catch (err) {
-    console.err('Post fetch failed:', err);
+    console.error('Post fetch failed:', err);
     error.value = 'Failed to load post.';
   } finally {
     isLoading.value = false;
