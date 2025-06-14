@@ -70,7 +70,13 @@ export const useAuth = () => {
 
   const logout = async () => {
     try {
-      await axios.post('/logout');
+      await axios.post(
+        '/logout',
+        {},
+        {
+          withCredentials: true,
+        }
+      );
     } catch (err) {
       console.warn('Logout request failed (already logged out?)');
     }
