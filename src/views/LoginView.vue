@@ -45,12 +45,14 @@ const password = ref('');
 const router = useRouter();
 const { login } = useAuth();
 
-const handleLogin = () => {
+const handleLogin = async () => {
   if (email.value && password.value) {
-    localStorage.setItem('isLoggedIn', true);
-    localStorage.setItem('userName', email.value);
-    login();
-    router.push('/');
+    try {
+      await login(email.value, password.value);
+      router.push('/');
+    } catch (err) {
+      alert('Invalid credentials');
+    }
   }
 };
 </script>

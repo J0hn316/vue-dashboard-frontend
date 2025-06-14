@@ -5,6 +5,16 @@
     <h2 class="text-2xl font-bold mb-4">Register</h2>
     <form @submit.prevent="register" class="space-y-4">
       <div>
+        <label for="name" class="block font-medium mb-1">Name</label>
+        <input
+          v-model="name"
+          type="text"
+          id="name"
+          required
+          class="w-full px-4 py-2 rounded border dark:border-gray-600 dark:bg-gray-900"
+        />
+      </div>
+      <div>
         <label for="email" class="block font-medium mb-1">Email</label>
         <input
           v-model="email"
@@ -22,6 +32,19 @@
           id="password"
           class="w-full px-4 py-2 rounded border dark:border-gray-600 dark:bg-gray-900"
           required
+        />
+      </div>
+
+      <div>
+        <label for="confirm" class="block font-medium mb-1"
+          >Confirm Password</label
+        >
+        <input
+          v-model="confirm"
+          type="password"
+          id="confirm"
+          required
+          class="w-full px-4 py-2 rounded border dark:border-gray-600 dark:bg-gray-900"
         />
       </div>
       <BaseButton type="submit" class="w-full">Register</BaseButton>
@@ -46,21 +69,28 @@ import BaseButton from '../components/ui/BaseButton.vue';
 
 const router = useRouter();
 
+const name = ref('');
 const email = ref('');
 const password = ref('');
+const confirm = ref('');
 const registered = ref(false);
-const { login } = useAuth();
+const { register: registerUser } = useAuth();
 
-const register = () => {
-  if (email.value && password.value) {
-    localStorage.setItem('user', JSON.stringify({ email: email.value }));
-    login();
-    registered.value = true;
+const register = async () => {
+  if (email.value && password.value && password.value === confirm.value) {
+    try {
+      await registerUser(name.value, email.value, password.value);
 
-    // Optionally redirect after short delay
-    setTimeout(() => {
-      router.push('/');
-    }, 1500);
+      registered.value = true;
+
+      setTimeout(() => {
+        router.push('/');
+      }, 1500);
+    } catch (error) {
+      alert('Registration failed. Check your input.');
+    }
+  } else {
+    alert('Please fill in all fields and make sure the passwords match.');
   }
 };
 </script>

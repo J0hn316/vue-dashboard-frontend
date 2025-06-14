@@ -4,7 +4,8 @@ import router from './router';
 import axios from 'axios';
 import './assets/main.css';
 
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
+axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.withCredentials = true;
 
 const app = createApp(App);
 app.use(router);
