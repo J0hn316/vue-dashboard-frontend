@@ -109,13 +109,13 @@ const { isDark, toggleDarkMode } = useDarkMode();
 const isLoggedIn = computed(() => auth.isLoggedIn.value);
 
 const navLinks = [
-  { label: 'Home', href: '/' },
+  { label: 'Home', href: '/home', auth: true },
   { label: 'Users', href: '/users', auth: true },
   { label: 'Posts', href: '/posts', auth: true },
-  { label: 'Todos', href: '/todos' },
+  { label: 'Todos', href: '/todos', auth: true },
   { label: 'Dashboard', href: '/dashboard', auth: true },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Register', href: '/', guestOnly: true },
   { label: 'Login', href: '/login', guestOnly: true },
-  { label: 'Register', href: '/register', guestOnly: true },
+  { label: 'Contact', href: '/contact' },
 ];
 </script>

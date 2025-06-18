@@ -1,64 +1,64 @@
 import { createRouter, createWebHistory } from 'vue-router';
-
-import Home from '../views/HomeView.vue';
-import Post from '../views/PostsView.vue';
-import Login from '../views/LoginView.vue';
-import Todos from '../views/TodosView.vue';
-import Users from '../views/UsersView.vue';
-import Contact from '../views/ContactView.vue';
-import Register from '../views/RegisterView.vue';
-import Dashboard from '../views/DashboardView.vue';
-import PostDetail from '../views/PostDetailView.vue';
+import { useAuth } from '@/utils/useAuth.js';
 
 const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login,
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: Register,
+    component: () => import('@/views/LoginView.vue'),
+    meta: { guest: true },
   },
   {
     path: '/',
+    name: 'Register',
+    component: () => import('@/views/RegisterView.vue'),
+    meta: { guest: true },
+  },
+  {
+    path: '/home',
     name: 'Home',
-    component: Home,
+    component: () => import('@/views/HomeView.vue'),
+    meta: { requiresAuth: true },
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: Dashboard,
+    component: () => import('@/views/DashboardView.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/todos',
     name: 'Todos',
-    component: Todos,
+    component: () => import('@/views/TodosView.vue'),
+    meta: { requiresAuth: true },
   },
   {
     path: '/users',
     name: 'Users',
-    component: Users,
+    component: () => import('@/views/UsersView.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/posts',
     name: 'Post',
-    component: Post,
+    component: () => import('@/views/PostsView.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/posts/:id',
     name: 'PostDetail',
-    component: PostDetail,
+    component: () => import('@/views/PostDetailView.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/contact',
     name: 'Contact',
-    component: Contact,
+    component: () => import('@/views/ContactView.vue'),
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('@/views/NotFoundView.vue'),
   },
 ];
 
@@ -67,23 +67,15 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+router.beforeEach((to, _, next) => {
+  const { isLoggedIn } = useAuth();
 
-  // 1. Block guests from protected pages
-  if (to.meta.requiresAuth && !isLoggedIn) {
-    next('/login');
-    return;
-  }
+  // trying to hit a protected page, but not logged in → send to login
+  if (to.meta.requiresAuth && !isLoggedIn) return next({ name: 'Login' });
 
-  // 2. Block logged-in users from auth pages.
-  const guestOnlyPages = ['/login', '/register'];
-  if (guestOnlyPages.includes(to.path) && isLoggedIn) {
-    next('/');
-    return;
-  }
+  // logged-in user trying to hit login/register → send to dashboard
+  if (to.meta.guest && isLoggedIn.value) return next({ name: 'Home' });
 
-  // 3. Otherwise, allow navigation
   next();
 });
 
