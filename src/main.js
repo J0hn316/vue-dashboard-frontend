@@ -1,8 +1,12 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router';
+
 import axios from 'axios';
+import router from './router';
+import Toast from 'vue-toastification';
+
 import './assets/main.css';
+import 'vue-toastification/dist/index.css';
 
 axios.defaults.baseURL =
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
@@ -19,6 +23,5 @@ axios.interceptors.request.use((config) => {
 });
 
 const app = createApp(App);
-app.use(router);
 
-app.mount('#app');
+app.use(router).use(Toast, { position: 'top-right' }).mount('#app');

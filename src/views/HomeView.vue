@@ -2,14 +2,14 @@
   <section>
     <h1 class="text-3xl font-bold mb-4">Welcome to the App</h1>
     <p>
-      Click on
+      Click
       <RouterLink
-        to="/dashboard"
+        to="/todos/create"
         class="text-blue-600 dark:text-blue-400 hover:underline font-medium"
       >
-        Dashboard
+        here
       </RouterLink>
-      to view Dashboard page.
+      to create a todo.
     </p>
   </section>
 </template>

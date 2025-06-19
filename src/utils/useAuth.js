@@ -1,5 +1,6 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import router from '../router';
 
 const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
 
@@ -51,6 +52,7 @@ export const useAuth = () => {
 
       // Refresh CSRF token after logout (optional, but helps prevent next-login issues)
       await axios.get('/sanctum/csrf-cookie');
+      router.push('/');
     } catch (err) {
       console.warn('Logout request failed (already logged out?)');
     }
@@ -60,7 +62,7 @@ export const useAuth = () => {
     isLoggedIn.value = false;
   };
 
-  onMounted(checkLogin);
+  // onMounted(checkLogin);
 
   return {
     isLoggedIn,

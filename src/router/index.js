@@ -33,6 +33,12 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/todos/create',
+    name: 'CreateTodo',
+    component: () => import('@/views/CreateTodoView.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/users',
     name: 'Users',
     component: () => import('@/views/UsersView.vue'),
