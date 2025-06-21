@@ -1,4 +1,4 @@
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
 import router from '../router';
 
@@ -11,12 +11,8 @@ export const useAuth = () => {
 
   const login = async (email, password) => {
     try {
-      // Get fresh CSRF cookie
-      await axios.get('/sanctum/csrf-cookie');
-
       // Login request
       await axios.post('/login', { email, password });
-
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userName', email);
       isLoggedIn.value = true;
@@ -28,8 +24,6 @@ export const useAuth = () => {
 
   const register = async (name, email, password) => {
     try {
-      await axios.get('/sanctum/csrf-cookie');
-
       await axios.post('/register', {
         name,
         email,
@@ -49,9 +43,6 @@ export const useAuth = () => {
   const logout = async () => {
     try {
       await axios.post('/logout');
-
-      // Refresh CSRF token after logout (optional, but helps prevent next-login issues)
-      await axios.get('/sanctum/csrf-cookie');
       router.push('/');
     } catch (err) {
       console.warn('Logout request failed (already logged out?)');

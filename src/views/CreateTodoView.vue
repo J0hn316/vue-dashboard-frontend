@@ -2,9 +2,7 @@
   <div
     class="max-w-xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow"
   >
-    <h1 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
-      Create Todo
-    </h1>
+    <h1 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Todo</h1>
 
     <form @submit.prevent="submitForm">
       <div class="mb-4">
@@ -24,13 +22,42 @@
           {{ errors.title }}
         </p>
       </div>
+      <div class="mb-4">
+        <label
+          for="description"
+          class="block mb-1 font-medium text-gray-700 dark:text-gray-200"
+        >
+          Description
+        </label>
+        <input
+          id="description"
+          v-model="description"
+          type="text"
+          class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        />
+        <p v-if="errors.description" class="text-red-500 text-sm mt-1">
+          {{ errors.description }}
+        </p>
+      </div>
+      <div class="mb-4">
+        <label
+          for="completed"
+          class="block mb-1 font-medium text-gray-700 dark:text-gray-200"
+        >
+          Completed
+        </label>
+        <input
+          id="completed"
+          v-model="completed"
+          type="checkbox"
+          class="p-2 border border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        />
+        <p v-if="errors.completed" class="text-red-500 text-sm mt-1">
+          {{ errors.completed }}
+        </p>
+      </div>
 
-      <button
-        type="submit"
-        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
-      >
-        Save Todo
-      </button>
+      <BaseButton type="submit">Create Todo</BaseButton>
     </form>
   </div>
 </template>
@@ -40,8 +67,11 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
+import BaseButton from '../components/ui/BaseButton.vue';
 
 const title = ref('');
+const description = ref('');
+const completed = ref(false);
 const errors = ref({});
 const toast = useToast();
 const router = useRouter();
@@ -54,8 +84,17 @@ const submitForm = async () => {
     return;
   }
 
+  if (!description.value.trim()) {
+    errors.value.description = 'Description is required';
+    return;
+  }
+
   try {
-    await axios.post('/api/todos', { title: title.value });
+    await axios.post('/api/todos', {
+      title: title.value,
+      description: description.value,
+      completed: completed.value,
+    });
     toast.success('Todo created successfully');
     router.push('/todos');
   } catch (error) {
