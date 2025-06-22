@@ -108,7 +108,7 @@ const fetchTodos = async () => {
   error.value = null;
 
   try {
-    const res = await axios.get('/todos', {
+    const res = await axios.get('/api/todos', {
       headers: {
         Authorization: `Bearer ${API_KEY}`,
       },

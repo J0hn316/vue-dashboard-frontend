@@ -12,7 +12,10 @@ export const useAuth = () => {
   const login = async (email, password) => {
     try {
       // Login request
-      await axios.post('/login', { email, password });
+      await axios.post('/api/auth/login', {
+        email,
+        password,
+      });
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userName', email);
       isLoggedIn.value = true;
@@ -24,7 +27,8 @@ export const useAuth = () => {
 
   const register = async (name, email, password) => {
     try {
-      await axios.post('/register', {
+      // Register request
+      await axios.post('/api/auth/register', {
         name,
         email,
         password,
@@ -42,7 +46,8 @@ export const useAuth = () => {
 
   const logout = async () => {
     try {
-      await axios.post('/logout');
+      // Logout request
+      await axios.post('/api/auth/logout');
       router.push('/');
     } catch (err) {
       console.warn('Logout request failed (already logged out?)');
