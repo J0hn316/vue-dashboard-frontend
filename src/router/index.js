@@ -77,7 +77,7 @@ router.beforeEach((to, _, next) => {
   const { isLoggedIn } = useAuth();
 
   // trying to hit a protected page, but not logged in → send to login
-  if (to.meta.requiresAuth && !isLoggedIn) return next({ name: 'Login' });
+  if (to.meta.requiresAuth && !isLoggedIn.value) return next({ name: 'Login' });
 
   // logged-in user trying to hit login/register → send to dashboard
   if (to.meta.guest && isLoggedIn.value) return next({ name: 'Home' });
