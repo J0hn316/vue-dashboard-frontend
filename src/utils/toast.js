@@ -15,7 +15,8 @@ export const initToast = () => {
  *    - 'error': red error message
  *    - 'info': blue neutral message (default)
  *    - 'warning': yellow warning message
+ * @param {number} [timeout=3000] - Optional timeout in milliseconds.
  */
-export const showToast = (type = 'info', message) => {
-  if (toastInstance) toastInstance[type](message);
+export const showToast = (type = 'info', message, timeout = 3000) => {
+  if (toastInstance) toastInstance[type](message, { timeout });
 };

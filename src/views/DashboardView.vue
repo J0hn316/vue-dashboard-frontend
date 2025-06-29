@@ -47,9 +47,8 @@ const user = userName.value;
 
 const unreadMessages = 0;
 
-const capitalizeFirstLetter = (string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-};
+const capitalizeFirstLetter = (string) =>
+  string.charAt(0).toUpperCase() + string.slice(1);
 </script>
 
 <style scoped>

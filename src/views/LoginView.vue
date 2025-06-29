@@ -34,11 +34,13 @@
     </p>
   </section>
 </template>
+
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuth } from '../utils/useAuth.js';
-import BaseButton from '../components/ui/BaseButton.vue';
+import { useAuth } from '@/utils/useAuth.js';
+import { showToast } from '@/utils/toast.js';
+import BaseButton from '@/components/ui/BaseButton.vue';
 
 const email = ref('');
 const password = ref('');
@@ -49,9 +51,9 @@ const handleLogin = async () => {
   if (email.value && password.value) {
     try {
       await login(email.value, password.value);
-      router.push('/');
+      router.push('/home');
     } catch (err) {
-      alert('Invalid credentials');
+      showToast('error', 'Invalid credentials', 2500);
     }
   }
 };

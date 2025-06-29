@@ -1,13 +1,12 @@
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import router from '../router';
-import { useToast } from 'vue-toastification';
+import { showToast } from '@/utils/toast.js';
 
 // Central reactive user state (null= not logged in or unknown)
 const user = ref(null);
 const isLoading = ref(true);
 const isLoggedIn = computed(() => !!user.value);
-const toast = useToast();
 
 export const useAuth = () => {
   // 3. Load user on app start or refresh
@@ -44,9 +43,9 @@ export const useAuth = () => {
         const errors = err.response.data.errors;
         console.warn(errors);
 
-        if (errors.email[0]?.includes('has already been taken')) {
-          toast.error('Email already taken');
-        }
+        if (errors.email[0]?.includes('has already been taken'))
+          showToast('error', 'Email already taken', 2500);
+
         // Optionally handle other validation messages
         throw new Error('Validation failed. Please check your input.');
       }

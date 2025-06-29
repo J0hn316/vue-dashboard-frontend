@@ -66,14 +66,13 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { useToast } from 'vue-toastification';
-import BaseButton from '../components/ui/BaseButton.vue';
+import { showToast } from '@/utils/toast.js';
+import BaseButton from '@/components/ui/BaseButton.vue';
 
 const title = ref('');
 const description = ref('');
 const completed = ref(false);
 const errors = ref({});
-const toast = useToast();
 const router = useRouter();
 
 const submitForm = async () => {
@@ -95,10 +94,10 @@ const submitForm = async () => {
       description: description.value,
       completed: completed.value,
     });
-    toast.success('Todo created successfully');
+    showToast('success', 'Todo created successfully');
     router.push('/todos');
   } catch (error) {
-    toast.error('Failed to create Todo');
+    showToast('error', 'Failed to create Todo', 2500);
     if (error.response?.data?.errors) {
       errors.value = error.response.data.errors;
       console.error(errors.value);

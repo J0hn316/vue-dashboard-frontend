@@ -4,7 +4,7 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import { initToast } from '@/utils/toast';
+import { initToast } from '@/utils/toast.js';
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
 
 onMounted(() => initToast());
