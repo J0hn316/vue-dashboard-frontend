@@ -6,7 +6,7 @@ import Toast from 'vue-toastification';
 import './assets/main.css';
 import 'vue-toastification/dist/index.css';
 
-import { ensureCsrfCookie } from './utils/csrf.js';
+import { ensureCsrfCookie } from '@/utils/csrf.js';
 
 axios.defaults.baseURL =
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
@@ -28,4 +28,15 @@ axios.interceptors.request.use(async (config) => {
   return config;
 });
 
-createApp(App).use(router).use(Toast, { position: 'top-right' }).mount('#app');
+createApp(App)
+  .use(router)
+  .use(Toast, {
+    position: 'top-right',
+    timeout: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnFocusLoss: true,
+    pauseOnHover: true,
+    draggable: true,
+  })
+  .mount('#app');

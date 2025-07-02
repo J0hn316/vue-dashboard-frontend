@@ -88,8 +88,8 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
-import BaseCard from './BaseCard.vue';
-import LoadingSpinner from './ui/LoadingSpinner.vue';
+import BaseCard from '@/components/BaseCard.vue';
+import LoadingSpinner from '@/components/ui/LoadingSpinner.vue';
 
 const todos = ref([]);
 const error = ref(null);

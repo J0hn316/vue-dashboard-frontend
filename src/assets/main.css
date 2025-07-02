@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 🌙 Custom Vue Toastification styling for Tailwind + dark mode */
+:root {
+  --toastify-color-success: #22c55e;
+  --toastify-color-error: #ef4444;
+  --toastify-color-warning: #facc15;
+  --toastify-color-info: #3b82f6;
+}
+
+/* Optional: rounded corners, shadows, padding */
+.Toastify__toast {
+  border-radius: 0.75rem; /* rounded-xl */
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 🌘 Dark mode support */
+.dark .Toastify__toast {
+  background-color: #1f2937 !important; /* bg-gray-800 */
+  color: #f9fafb !important; /* text-gray-100 */
+  border: 1px solid #374151; /* border-gray-700 */
+}
