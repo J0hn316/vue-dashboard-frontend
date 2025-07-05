@@ -7,6 +7,7 @@ import './assets/main.css';
 import 'vue-toastification/dist/index.css';
 
 import { ensureCsrfCookie } from '@/utils/csrf.js';
+import { authStore } from '@/stores/auth.js';
 
 axios.defaults.baseURL =
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
@@ -28,15 +29,27 @@ axios.interceptors.request.use(async (config) => {
   return config;
 });
 
-createApp(App)
-  .use(router)
-  .use(Toast, {
-    position: 'top-right',
-    timeout: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnFocusLoss: true,
-    pauseOnHover: true,
-    draggable: true,
-  })
-  .mount('#app');
+const startApp = async () => {
+  const auth = authStore();
+  await auth.fetchUser(); // wait until we know if user is logged in or not
+
+  // console.log('User after fetch:', fetchUser());
+  const app = createApp(App);
+
+  app.provide('auth', auth);
+
+  app
+    .use(router)
+    .use(Toast, {
+      position: 'top-right',
+      timeout: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnFocusLoss: true,
+      pauseOnHover: true,
+      draggable: true,
+    })
+    .mount('#app');
+};
+
+startApp(); // start the app

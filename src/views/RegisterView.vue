@@ -72,9 +72,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuth } from '../utils/useAuth';
+// import { useAuth } from '../utils/useAuth';
 import BaseButton from '../components/ui/BaseButton.vue';
 import LoadingSpinner from '../components/ui/LoadingSpinner.vue';
 
@@ -87,7 +87,9 @@ const registerError = ref('');
 const confirmPassword = ref('');
 const loading = ref(false);
 const registered = ref(false);
-const { register: registerUser } = useAuth();
+// const { register: registerUser } = useAuth();
+
+const auth = inject('auth'); // Inject the auth object from the parent component
 
 const register = async () => {
   if (
@@ -99,7 +101,11 @@ const register = async () => {
     registerError.value = '';
 
     try {
-      await registerUser(name.value, email.value.toLowerCase(), password.value);
+      await auth.register(
+        name.value,
+        email.value.toLowerCase(),
+        password.value
+      );
       registered.value = true;
 
       setTimeout(() => {

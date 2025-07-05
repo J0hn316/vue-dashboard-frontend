@@ -34,11 +34,7 @@
 
       <!-- Desktop nav links -->
       <ul class="hidden md:flex space-x-6 text-gray-700 dark:text-gray-200">
-        <NavLinkList
-          :links="navLinks"
-          :is-logged-in="isLoggedIn"
-          :showLogout="true"
-        />
+        <NavLinkList :links="navLinks" :showLogout="false" />
       </ul>
 
       <!-- Mobile toggle button -->
@@ -82,8 +78,7 @@
       <ul class="space-y-2 text-gray-700 dark:text-gray-200">
         <NavLinkList
           :links="navLinks"
-          :is-logged-in="isLoggedIn"
-          :showLogout="true"
+          :showLogout="false"
           :onNavigate="
             () => {
               isOpen = false;
@@ -96,17 +91,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-
-import { useAuth } from '../utils/useAuth.js';
-import { useDarkMode } from '../utils/useDarkMode.js';
-import NavLinkList from './NavLinkList.vue';
+import { ref } from 'vue';
+import { useDarkMode } from '@/utils/useDarkMode.js';
+import NavLinkList from '@/components/NavLinkList.vue';
 
 const isOpen = ref(false);
-const auth = useAuth();
-const { isDark, toggleDarkMode } = useDarkMode();
 
-const isLoggedIn = computed(() => auth.isLoggedIn.value);
+const { isDark, toggleDarkMode } = useDarkMode();
 
 const navLinks = [
   { label: 'Home', href: '/home', auth: true },

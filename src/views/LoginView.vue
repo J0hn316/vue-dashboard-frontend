@@ -36,21 +36,34 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuth } from '@/utils/useAuth.js';
+// import { useAuth } from '@/utils/useAuth.js';
 import { showToast } from '@/utils/toast.js';
 import BaseButton from '@/components/ui/BaseButton.vue';
 
 const email = ref('');
 const password = ref('');
 const router = useRouter();
-const { login } = useAuth();
+const auth = inject('auth'); // Inject the auth object from the parent component
+// const { login } = useAuth();
 
 const handleLogin = async () => {
   if (email.value && password.value) {
     try {
-      await login(email.value, password.value);
+      await auth.login(email.value, password.value);
+
+      // ✅ Wait until auth.user is actually populated
+      const waitUntilLoggedIn = () =>
+        new Promise((resolve) => {
+          const check = () => {
+            if (auth.user.value) resolve();
+            else setTimeout(check, 1000);
+          };
+          check();
+        });
+
+      await waitUntilLoggedIn();
       router.push('/home');
     } catch (err) {
       showToast('error', 'Invalid credentials', 2500);
