@@ -11,23 +11,25 @@ const isLoggedIn = computed(() => {
 
 const fetchUser = async () => {
   isLoading.value = true;
-  console.log('[fetchUser] started');
   try {
     const res = await axios.get('/api/user');
     user.value = res.data;
-    console.log('[fetchUser] user loaded:', user.value);
     return res.data;
   } catch (err) {
-    console.warn('[fetchUser] failed', err);
-    console.error(
-      '[fetchUser] error:',
-      err.response?.status,
-      err.response?.data
-    );
+    if (err.status === 401) {
+      // Don't log if simply unauthenticated (not logged in)
+      console.warn('That 401 error can safely be ignored');
+    } else {
+      console.warn('[fetchUser] failed:', err.response?.data || err.message);
+      console.error(
+        '[fetchUser] error:',
+        err.response?.status,
+        err.response?.data
+      );
+    }
     user.value = null;
   } finally {
     isLoading.value = false;
-    console.log('[fetchUser] isLoading set to false');
   }
 };
 
@@ -35,8 +37,6 @@ const login = async (email, password) => {
   await axios.get('/sanctum/csrf-cookie');
   await axios.post('/api/auth/login', { email, password });
   await fetchUser();
-  console.log('[auth.login] called with:', email);
-  console.log('[auth.login] fetchUser finished, user:', user.value);
 };
 
 const register = async (name, email, password) => {

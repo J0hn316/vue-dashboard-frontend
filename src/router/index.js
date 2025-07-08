@@ -77,36 +77,23 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  // const { isLoggedIn, isLoading, fetchUser } = inject('auth');
-
-  console.log('[router.beforeEach] isLoading:', auth.isLoading.value);
-  console.log('[router.beforeEach] isLoggedIn:', auth.isLoggedIn.value);
-  console.log('[router.beforeEach] to:', to.path);
-
   // 🔁 1. If still loading (e.g., after page refresh), wait for fetchUser
   if (!auth.user.value && auth.isLoading.value) {
     await auth.fetchUser();
-    console.log('[router.beforeEach] waited for fetchUser');
   }
 
   // 🔒 2. If route requires auth but not logged in
   if (to.meta.requiresAuth && !auth.isLoggedIn.value) {
-    console.log(
-      '[router.beforeEach] blocked unauthenticated access to:',
-      to.path
-    );
     showToast('error', 'You must be logged in to view that page.');
     return next({ name: 'Login' });
   }
 
   // 🚫 3. If route is guest-only but user is logged in
   if (to.meta.guest && auth.isLoggedIn.value) {
-    console.log('[router.beforeEach] redirecting guest from:', to.path);
     return next({ name: 'Home' });
   }
 
   // ✅ 4. Allow route
-  console.log('[router.beforeEach] allowed access to:', to.path);
   next();
 });
 

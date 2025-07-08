@@ -9,8 +9,7 @@ import 'vue-toastification/dist/index.css';
 import { ensureCsrfCookie } from '@/utils/csrf.js';
 import { authStore } from '@/stores/auth.js';
 
-axios.defaults.baseURL =
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
 axios.defaults.xsrfCookieName = 'XSRF-TOKEN';
 axios.defaults.xsrfHeaderName = 'X-XSRF-TOKEN';
@@ -31,15 +30,18 @@ axios.interceptors.request.use(async (config) => {
 
 const startApp = async () => {
   const auth = authStore();
-  await auth.fetchUser(); // wait until we know if user is logged in or not
-
-  // console.log('User after fetch:', fetchUser());
   const app = createApp(App);
+  const publicRoutes = ['/login', '/'];
 
   app.provide('auth', auth);
+  app.use(router);
 
+  if (!publicRoutes.includes(router.currentRoute.value.path)) {
+    await auth.fetchUser();
+  }
+
+  await router.isReady();
   app
-    .use(router)
     .use(Toast, {
       position: 'top-right',
       timeout: 3000,

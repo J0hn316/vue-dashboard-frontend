@@ -34,7 +34,7 @@
 
       <!-- Desktop nav links -->
       <ul class="hidden md:flex space-x-6 text-gray-700 dark:text-gray-200">
-        <NavLinkList :links="navLinks" :showLogout="false" />
+        <NavLinkList :links="navLinks" :showLogout="true" />
       </ul>
 
       <!-- Mobile toggle button -->
@@ -78,7 +78,7 @@
       <ul class="space-y-2 text-gray-700 dark:text-gray-200">
         <NavLinkList
           :links="navLinks"
-          :showLogout="false"
+          :showLogout="true"
           :onNavigate="
             () => {
               isOpen = false;
