@@ -96,7 +96,6 @@ import { useDarkMode } from '@/utils/useDarkMode.js';
 import NavLinkList from '@/components/NavLinkList.vue';
 
 const isOpen = ref(false);
-
 const { isDark, toggleDarkMode } = useDarkMode();
 
 const navLinks = [

@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { authStore } from '@/stores/auth.js';
+import { useAuth } from '@/utils/useAuth.js';
 import { showToast } from '@/utils/toast.js';
-
-const auth = authStore();
 
 const routes = [
   {
@@ -77,18 +75,25 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  // 🔁 1. If still loading (e.g., after page refresh), wait for fetchUser
+  const auth = useAuth();
+
+  if (!auth) {
+    console.warn('[router.beforeEach] auth store not ready');
+    // allow navigation to avoid hard crash
+    return next();
+  }
+
+  // If refreshing, wait for user load (only once)
   if (!auth.user.value && auth.isLoading.value) {
     await auth.fetchUser();
   }
 
-  // 🔒 2. If route requires auth but not logged in
+  // 🔒 If route requires auth but not logged in
   if (to.meta.requiresAuth && !auth.isLoggedIn.value) {
     showToast('error', 'You must be logged in to view that page.');
     return next({ name: 'Login' });
   }
 
-  // 🚫 3. If route is guest-only but user is logged in
   if (to.meta.guest && auth.isLoggedIn.value) {
     return next({ name: 'Home' });
   }

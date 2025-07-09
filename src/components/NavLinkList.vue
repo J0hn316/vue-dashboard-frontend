@@ -19,13 +19,7 @@
     </template>
     <BaseButton
       v-if="auth.isLoggedIn.value && showLogout"
-      @click="
-        () => {
-          auth.logout();
-          router.push('/login');
-          onNavigate?.();
-        }
-      "
+      @click="handleLogout"
       size="sm"
     >
       Logout
@@ -34,7 +28,6 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
 import { inject } from 'vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 
@@ -54,10 +47,10 @@ const props = defineProps({
   onNavigate: Function,
 });
 
-// const { logout, isLoggedIn, isLoading } = inject('auth');
-
 const auth = inject('auth');
-const router = useRouter();
 
-// console.log(isLoggedIn.value);
+const handleLogout = async () => {
+  await auth.logout();
+  props.onNavigate?.();
+};
 </script>
